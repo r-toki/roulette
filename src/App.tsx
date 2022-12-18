@@ -1,5 +1,6 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Wheel } from 'react-custom-roulette';
+import { useLocalStorage } from 'react-use';
 
 const backgroundColors = ['#ff8f43', '#70bbe0', '#0b3351', '#f9dd50'];
 const textColors = [
@@ -19,17 +20,17 @@ const innerBorderWidth = 0;
 const innerRadius = 0;
 const radiusLineColor = '#eeeeee';
 const radiusLineWidth = 8;
-const fontSize = 17;
+const fontSize = 16;
 const textDistance = 60;
 const spinDuration = 1.0;
 
 export const App = () => {
-  const [input, setInput] = useState('sample1\nsample2\nsample3\nsample4');
+  const [input, setInput] = useLocalStorage('input', 'sample1\nsample2\nsample3\nsample4');
   const inputOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value);
 
   const data = useMemo(
     () =>
-      input
+      input!
         .split('\n')
         .filter((v) => !!v)
         .map((v) => ({ option: v })),
@@ -56,24 +57,27 @@ export const App = () => {
       className="d-flex flex-column align-items-center gap-2"
       style={{ width: '480px', margin: '0 auto', padding: '20px 16px' }}
     >
-      <Wheel
-        mustStartSpinning={mustSpin}
-        prizeNumber={prizeNumber}
-        data={data}
-        backgroundColors={backgroundColors}
-        textColors={textColors}
-        fontSize={fontSize}
-        outerBorderColor={outerBorderColor}
-        outerBorderWidth={outerBorderWidth}
-        innerRadius={innerRadius}
-        innerBorderColor={innerBorderColor}
-        innerBorderWidth={innerBorderWidth}
-        radiusLineColor={radiusLineColor}
-        radiusLineWidth={radiusLineWidth}
-        spinDuration={spinDuration}
-        textDistance={textDistance}
-        onStopSpinning={onStopSpin}
-      />
+      <div>
+        <Wheel
+          mustStartSpinning={mustSpin}
+          prizeNumber={prizeNumber}
+          data={data}
+          backgroundColors={backgroundColors}
+          textColors={textColors}
+          fontSize={fontSize}
+          outerBorderColor={outerBorderColor}
+          outerBorderWidth={outerBorderWidth}
+          innerRadius={innerRadius}
+          innerBorderColor={innerBorderColor}
+          innerBorderWidth={innerBorderWidth}
+          radiusLineColor={radiusLineColor}
+          radiusLineWidth={radiusLineWidth}
+          spinDuration={spinDuration}
+          textDistance={textDistance}
+          onStopSpinning={onStopSpin}
+        />
+      </div>
+
       <button className="btn btn-primary fw-bold" onClick={onStartSpin}>
         SPIN
       </button>
